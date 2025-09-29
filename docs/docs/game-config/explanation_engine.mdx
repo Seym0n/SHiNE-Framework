@@ -277,7 +277,7 @@ It contains the configuration for the external explanation engine, including the
 }
 ```
 
-#### REST API Implementation
+### REST API Implementation
 
 #### Setup Configuration Example
 
@@ -306,7 +306,15 @@ When using a REST-based external explanation engine ("external_engine_type": "re
 ##### POST `/logger`
 
 This endpoint is called **whenever a participant interacts** with the environment or when relevant system events occur.
-It provides the external engine with rich **contextual information** about the participant’s current state, environment, and activity history.
+It provides the external engine with rich **contextual information** about the participant's current state, environment, and activity history.
+
+:::info Environment Data Sources
+The `environment` array contains data from two sources:
+- **Task Environment Variables**: Context defined in the current task's `environment` field (e.g., Weather, Temperature)
+- **User Custom Data**: Session variables passed via URL context (e.g., user group, study condition, user type)
+
+For more details on session context and user variables, see [Session Context & User Variables](../getting-started.mdx#session-context--user-variables).
+:::
 
 **Request Payload Example:**
 ```json
@@ -316,7 +324,9 @@ It provides the external engine with rich **contextual information** about the p
     "ingame_time": "08:32",
     "environment": [
         { "name": "Weather", "value": "Sunny" },
-        { "name": "Temperature", "value": 20 }
+        { "name": "Temperature", "value": 20 },
+        { "name": "group", "value": "control" },
+        { "name": "user_type", "value": "novice" }
     ],
     "devices": [
         {
@@ -425,7 +435,8 @@ Sent **whenever participant actions generate logs**, such as device interactions
     "current_task": "make_coffee",
     "ingame_time": "08:32",
     "environment": [
-        { "name": "Weather", "value": "Sunny" }
+        { "name": "Weather", "value": "Sunny" },
+        { "name": "group", "value": "control" }
     ],
     "devices": [
         {

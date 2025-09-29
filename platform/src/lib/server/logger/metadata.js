@@ -25,7 +25,7 @@ class Metadata {
 
         let userDevices = await this.getUserDevices();
 
-        let environmentContext = this.getContextVariables();
+        let environmentContext = await this.getContextVariables(currentTask);
 
         return {
             "user_id": this.sessionId,
@@ -89,19 +89,27 @@ class Metadata {
         return userDevices;
     }
 
-    getContextVariables() {
-        if (!this.userData['customData']) {
-            return [];
-        }
-
+    getContextVariables(currentTask) {
         let contextVariables = [];
 
+        // Add custom data from user session
+        if (this.userData['customData']) {
+            for (let property in this.userData['customData']) {
+                contextVariables.push({
+                    'name': property,
+                    'value': this.userData['customData'][property]
+                })
+            }
+        }
 
-        for (let property in this.userData['customData']) {
-            contextVariables.push({
-                'name': property,
-                'value': this.userData['customData'][property]
-            })
+        // Add current task environment variables
+        if (currentTask && currentTask.taskDetail && currentTask.taskDetail.environment) {
+            for (let envVar of currentTask.taskDetail.environment) {
+                contextVariables.push({
+                    'name': envVar.name,
+                    'value': envVar.value
+                });
+            }
         }
 
         return contextVariables;
