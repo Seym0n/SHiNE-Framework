@@ -72,7 +72,7 @@ Once the application is up, access it via http://localhost:3000/?data=eyB9.
 ### Option 2: Using Pre-built Image from GitHub Container Registry
 
 You can use the pre-built images from GitHub Container Registry (GHCR) instead of building locally.
-However, the game.json and explanation.json cannot be modified using the pre-built image, instead it comes with the default scenario.
+However, the game.json and explanation.json cannot be modified using the pre-built image, instead it comes with the default scenario (https://exmartlab.github.io/SHiNE-Framework/scenario/scenario-2).
 
 First, create a Docker network and start MongoDB:
 

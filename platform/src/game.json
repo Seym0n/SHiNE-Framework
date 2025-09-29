@@ -63,7 +63,7 @@
                     "type": "Time",
                     "condition": {
                         "operator": ">=",
-                        "value": "22:03"
+                        "value": "22:00"
                     }
                 },
                 {
