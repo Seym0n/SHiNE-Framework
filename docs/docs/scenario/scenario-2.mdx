@@ -2,30 +2,40 @@
 sidebar_position: 2
 ---
 
-# Scenario 2
+# Default Scenario
+# Introduction
 
-In the Scenario 2 which you typically see when you spin up the base Docker (Compose) image, we have three rooms:
-- a living room
-- Bob's Room
-- Your Room
+The Default Scenario is the standard setup loaded when the base Docker (Compose) image is launched. It features a smart home environment with three rooms:
+- Living Room
+- Bob’s Room
+- Participant's Room
 
-Among these rooms, the user need to complete these three tasks
+In this scenario, the user is expected to complete three tasks, each associated with a contextual smart home rule:
 
-| # | Task                        | Feasible |
-|---|-----------------------------|----------|
-| 1 | Turn on the Deep Fryer      | Yes      |
-| 2 | Turn on the Mixer           | No       |
-| 3 | Open Book in your own room  | Yes      |
+| # | Task                   | Involved Automation / Rule                                  |
+|---|------------------------|--------------------------------------------------------------|
+| 1 | Turn on the Deep Fryer | Deep Fryer only turns on when the Cooker Hood is on          |
+| 2 | Turn on the Mixer      | Mixer automatically turns off after 22:00                    |
+| 3 | Open Book in Your Room | Lamp turns on 3 seconds after the book is opened             |
 
-Each task is accompanied by a smart home rule which is designated as follow 
+### **Dynamics for Each Task**
 
-| # | Rule                                           | Associated Task |
-|---|------------------------------------------------|------------------|
-| 1 | Deep Fryer Only On When Cooker Hood Is On      | Task 1           |
-| 2 | Turn Off Mixer After 22:00                     | Task 2           |
-| 3 | Turn On Lamp When Book Is Open After 3 Seconds | Task 3           |
+-   **Task 1: Turn on the Deep Fryer**
+This task is affected by a rule that requires the cooker hood to be active. The fryer cannot be turned on unless this condition is met, creating a _resolvable conflict_. The explanation is meant to help the user recognize and address the dependency, enabling successful task completion.
+    
+-   **Task 2: Turn on the Mixer**
+ This task is governed by a time-based rule that disables the mixer after 22:00. If attempted during restricted hours, the task cannot be completed, and the conflict is _not resolvable_ by user action. The explanation helps users understand the reason for failure and encourages them to stop pursuing the task.
+    
+-   **Task 3: Open Book in Your Room**
+This task can be completed without any conflicts. However, a related automation (lamp turns on with a delay) may surprise the user. Although the behavior does not block task completion, an explanation is available to clarify the system’s response and maintain transparency.
 
+In all cases, explanations are configured to be shown automatically (push-based) when the user fails to complete a task. For the sake of demonstration, we use a simplified explanation approach—namely, an integrated explanation—where a specific explanation is directly mapped to each task. This means that the same explanation is shown to all users whenever that task is not successfully completed.
 
+| Task                   | Explanation Shown                                                   |
+|------------------------|----------------------------------------------------------------------|
+| #1 | As long as the cooker hood is off, the deep fryer remains off.      |
+| #2     | The mixer cannot be turned on after 22:00.                          |
+| #3 | The lamp is turned on because the room is dark                      |
 
 # Configuration File 
 
