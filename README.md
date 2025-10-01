@@ -1,5 +1,7 @@
 # V-SHINE Study Platform
 
+<a href="https://www.youtube.com/watch?v=b_VKYm9J7ho"><img src="https://img.youtube.com/vi/b_VKYm9J7ho/maxresdefault.jpg" alt="Presentation Video for ICSE 2026 Demonstration" width="320"></a>
+
 ## Requirements
 
 - NodeJS 20 (Virual Study Platform)
