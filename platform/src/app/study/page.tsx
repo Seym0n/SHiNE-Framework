@@ -355,13 +355,13 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="grid items-center justify-items-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900 dark:border-gray-100"></div>
       </div>
     );
   }
 
   return (
-<div className="flex flex-col items-center justify-center min-h-screen w-full bg-white">
+<div className="flex flex-col items-center justify-center min-h-screen w-full bg-white dark:bg-gray-900">
   {/* Main layout: sidebar and game area arranged horizontally */}
   <div className="flex flex-row items-center justify-center">
     {/* Left sidebar: task management, timer, and controls */}
@@ -387,7 +387,7 @@ export default function Home() {
       {gameConfig ? (
         <PhaserGame config={gameConfig} />
       ) : (
-        <div className="bg-gray-200 animate-pulse rounded-lg h-[600px] w-[768px]"></div>
+        <div className="bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg h-[600px] w-[768px]"></div>
       )}
     </div>
   </div>

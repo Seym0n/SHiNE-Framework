@@ -68,39 +68,39 @@ const TaskAbortModal = ({
       className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all animate-fadeIn">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-xl overflow-hidden transform transition-all animate-fadeIn">
         {/* Modal header with warning icon and close button */}
-        <div className="px-6 py-3 border-b border-gray-200 flex items-center">
-          <div className="bg-red-100 p-2 rounded-full mr-3">
-            <AlertTriangle className="text-red-500" size={20} />
+        <div className="px-6 py-3 border-b border-gray-200 dark:border-gray-600 flex items-center">
+          <div className="bg-red-100 dark:bg-red-900 p-2 rounded-full mr-3">
+            <AlertTriangle className="text-red-500 dark:text-red-400" size={20} />
           </div>
-          <h2 className="text-xl font-semibold text-gray-800 flex-1">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 flex-1">
             Why do you want to abort the task?
           </h2>
-          <button 
+          <button
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Close"
           >
-            <X size={20} className="text-gray-500" />
+            <X size={20} className="text-gray-500 dark:text-gray-400" />
           </button>
         </div>
-        
+
         {/* Modal content with reason selection */}
         <div className="px-6 py-3">
-          <p className="mb-3 text-gray-600">
+          <p className="mb-3 text-gray-600 dark:text-gray-300">
             Please select one of the following reasons for aborting this task:
           </p>
-          
+
           {/* Dynamic list of abort reasons as selectable options */}
           <div className="space-y-2">
             {abortReasons.map((reason, index) => (
-              <div 
+              <div
                 key={index}
                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 flex items-center ${
-                  selectedReason === index 
-                    ? 'bg-blue-50 border-blue-400 shadow-sm' 
-                    : 'bg-gray-50 border-gray-200 hover:border-gray-300 hover:bg-gray-100'
+                  selectedReason === index
+                    ? 'bg-blue-50 dark:bg-blue-900/40 border-blue-400 shadow-sm'
+                    : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
                 onClick={() => setSelectedReason(index)}
               >
@@ -111,22 +111,22 @@ const TaskAbortModal = ({
                       <Check className="text-white" size={12} />
                     </div>
                   ) : (
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-500"></div>
                   )}
                 </div>
-                <span className={`${selectedReason === index ? 'text-blue-800' : 'text-gray-700'}`}>
+                <span className={`${selectedReason === index ? 'text-blue-800 dark:text-blue-300' : 'text-gray-700 dark:text-gray-200'}`}>
                   {reason}
                 </span>
               </div>
             ))}
           </div>
         </div>
-        
+
         {/* Modal footer with action buttons */}
-        <div className="flex justify-end px-6 py-3 bg-gray-50 border-t border-gray-200 space-x-3">
+        <div className="flex justify-end px-6 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 space-x-3">
           <button
             onClick={onClose}
-            className="px-4 py-1.5 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 font-medium text-gray-700 transition-colors shadow-sm"
+            className="px-4 py-1.5 border border-gray-300 dark:border-gray-500 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium text-gray-700 dark:text-gray-200 transition-colors shadow-sm"
           >
             Cancel
           </button>

@@ -214,7 +214,7 @@ const SmartHomeSidebar = ({
   const renderProgressBar = () => {
     return (
       <div className="mt-4">
-        <h3 className="font-bold text-gray-700 mb-2">Progress</h3>
+        <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-2">Progress</h3>
         <div className="flex">
           {tasks.map((task) => {
             let bgColor;
@@ -224,8 +224,8 @@ const SmartHomeSidebar = ({
               bgColor = 'bg-green-500';
             } else if (task.isAborted || task.isTimedOut) {
               bgColor = 'bg-gray-500';
-            } else {              
-              bgColor = 'bg-gray-100';
+            } else {
+              bgColor = 'bg-gray-200 dark:bg-gray-600';
             }
             
             return (
@@ -270,7 +270,7 @@ const SmartHomeSidebar = ({
               onChange={handleMessageChange}
               onKeyPress={handleKeyPress}
               placeholder="Ask a question..."
-              className="flex-1 border border-gray-300 rounded-l-md py-2 px-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-md py-2 px-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
               autoFocus
             />
             <button
@@ -287,44 +287,44 @@ const SmartHomeSidebar = ({
   };
   
   return (
-    <div className="flex flex-col h-full w-64 bg-white rounded-lg shadow-md p-4 space-y-7">
+    <div className="flex flex-col h-full w-64 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 space-y-7">
       {/* Sidebar header with platform branding */}
-      <div className="flex items-center justify-center pb-4 border-b border-gray-200">
-        <Home className="mr-2 text-blue-600" />
-        <h1 className="text-2xl font-bold text-center text-gray-800">Smart Home<br />Simulation</h1>
+      <div className="flex items-center justify-center pb-4 border-b border-gray-200 dark:border-gray-600">
+        <Home className="mr-2 text-blue-600 dark:text-blue-400" />
+        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Smart Home<br />Simulation</h1>
       </div>
       
       {/* Current task display with optional abort button */}
-      <div className="bg-gray-100 p-4 rounded-lg">
+      <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
         <div className="flex justify-between items-start">
-          <h2 className="font-bold text-gray-700">Your Task:</h2>
+          <h2 className="font-bold text-gray-700 dark:text-gray-200">Your Task:</h2>
           {tasksRemaining > 0 && currentTask && currentTask['abortable'] && (
-            <button 
+            <button
               onClick={onOpenAbortModal}
-              className="bg-gray-200 rounded-full p-1 hover:bg-gray-300 transition-colors"
+              className="bg-gray-200 dark:bg-gray-600 rounded-full p-1 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
             >
-              <X size={18} />
+              <X size={18} className="text-gray-700 dark:text-gray-200" />
             </button>
           )}
         </div>
         {tasksRemaining > 0 ? (
-          <p className="mt-2 text-gray-800">{currentTask?.taskDescription || "No active task"}</p>
+          <p className="mt-2 text-gray-800 dark:text-gray-100">{currentTask?.taskDescription || "No active task"}</p>
         ) : (
-          <p className="mt-2 text-green-600 font-semibold">All tasks completed!</p>
+          <p className="mt-2 text-green-600 dark:text-green-400 font-semibold">All tasks completed!</p>
         )}
       </div>
       
       {/* Countdown timer for current task */}
       <div className="flex items-center justify-center">
-        <Clock className="text-gray-600 mr-2" />
-        <span className="text-xl font-mono">{formatTime(getRemainingTime())}</span>
+        <Clock className="text-gray-600 dark:text-gray-300 mr-2" />
+        <span className="text-xl font-mono text-gray-900 dark:text-gray-100">{formatTime(getRemainingTime())}</span>
       </div>
       
       {/* Explanation request section (conditional) */}
       {renderExplainMeSection()}
            
       {/* Progress bar showing overall study completion */}
-      <div className="mt-auto border-t border-gray-200 pt-4">
+      <div className="mt-auto border-t border-gray-200 dark:border-gray-600 pt-4">
         {renderProgressBar()}
       </div>
       
