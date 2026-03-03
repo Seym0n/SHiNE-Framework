@@ -17,6 +17,7 @@ export interface StatelessActionButton {
  */
 export class StatelessActionManager {
     private scene: Scene;
+    private uiScale: number;
     /** Map of active buttons by name, storing visual components */
     private activeButtons: Map<string, {
         button: Phaser.GameObjects.Rectangle,
@@ -27,8 +28,9 @@ export class StatelessActionManager {
      * Initialize the stateless action manager
      * @param scene The Phaser scene to create interactions in
      */
-    constructor(scene: Scene) {
+    constructor(scene: Scene, uiScale = 1) {
         this.scene = scene;
+        this.uiScale = uiScale;
         this.activeButtons = new Map();
     }
 
@@ -48,9 +50,10 @@ export class StatelessActionManager {
     ): StatelessActionButton {
         const buttonGroup: Phaser.GameObjects.GameObject[] = [];
         
-        // Button visual configuration
-        const buttonWidth = 120;
-        const buttonHeight = 40;
+        // Button visual configuration (scaled by uiScale)
+        const s = this.uiScale;
+        const buttonWidth = Math.round(120 * s);
+        const buttonHeight = Math.round(40 * s);
         let displayWidth = 0;
         let displayHeight = 0;
         
@@ -81,10 +84,10 @@ export class StatelessActionManager {
         
         // Create button text (temporarily create to measure dimensions)
         const tempText = this.scene.add.text(0, 0, struct.name, {
-            fontSize: '16px', 
-            fontFamily: 'Arial', 
+            fontSize: `${Math.round(16 * s)}px`,
+            fontFamily: 'Arial',
             fontStyle: 'bold',
-            color: textColor 
+            color: textColor
         });
         
         // Calculate centered position with origin 0
@@ -98,11 +101,11 @@ export class StatelessActionManager {
             textX,
             textY,
             struct.name,
-            { 
-                fontSize: '16px', 
-                fontFamily: 'Arial', 
+            {
+                fontSize: `${Math.round(16 * s)}px`,
+                fontFamily: 'Arial',
                 fontStyle: 'bold',
-                color: textColor 
+                color: textColor
             }
         )
         .setDepth(2)

@@ -214,7 +214,7 @@ const SmartHomeSidebar = ({
   const renderProgressBar = () => {
     return (
       <div className="mt-4">
-        <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-2">Progress</h3>
+        <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-2 md:text-sm sm:text-xs">Progress</h3>
         <div className="flex">
           {tasks.map((task) => {
             let bgColor;
@@ -287,15 +287,15 @@ const SmartHomeSidebar = ({
   };
   
   return (
-    <div className="flex flex-col h-full w-64 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 space-y-7">
-      {/* Sidebar header with platform branding */}
-      <div className="flex items-center justify-center pb-4 border-b border-gray-200 dark:border-gray-600">
+    <div className="flex flex-col h-full w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-3 sm:p-2">
+      {/* Sidebar header with platform branding — visible only on desktop (≥1024px) */}
+      <div className="hidden lg:flex items-center justify-center pb-4 border-b border-gray-200 dark:border-gray-600 mb-7">
         <Home className="mr-2 text-blue-600 dark:text-blue-400" />
         <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Smart Home<br />Simulation</h1>
       </div>
-      
+
       {/* Current task display with optional abort button */}
-      <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+      <div className="bg-gray-100 dark:bg-gray-700 p-4 md:p-3 sm:p-2 rounded-lg mb-7 md:mb-4 sm:mb-3">
         <div className="flex justify-between items-start">
           <h2 className="font-bold text-gray-700 dark:text-gray-200">Your Task:</h2>
           {tasksRemaining > 0 && currentTask && currentTask['abortable'] && (
@@ -308,18 +308,18 @@ const SmartHomeSidebar = ({
           )}
         </div>
         {tasksRemaining > 0 ? (
-          <p className="mt-2 text-gray-800 dark:text-gray-100">{currentTask?.taskDescription || "No active task"}</p>
+          <p className="mt-2 text-gray-800 dark:text-gray-100 md:text-sm sm:text-xs">{currentTask?.taskDescription || "No active task"}</p>
         ) : (
           <p className="mt-2 text-green-600 dark:text-green-400 font-semibold">All tasks completed!</p>
         )}
       </div>
       
       {/* Countdown timer for current task */}
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mb-7 md:mb-4 sm:mb-3">
         <Clock className="text-gray-600 dark:text-gray-300 mr-2" />
-        <span className="text-xl font-mono text-gray-900 dark:text-gray-100">{formatTime(getRemainingTime())}</span>
+        <span className="text-xl md:text-base sm:text-sm font-mono text-gray-900 dark:text-gray-100">{formatTime(getRemainingTime())}</span>
       </div>
-      
+
       {/* Explanation request section (conditional) */}
       {renderExplainMeSection()}
            

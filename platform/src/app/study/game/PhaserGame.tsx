@@ -8,7 +8,7 @@ import { IRefPhaserGame, IPhaserGameProps } from '../types';
  * React component that integrates Phaser game engine with React
  * Manages the lifecycle of the Phaser game instance and provides access via ref
  */
-export const PhaserGame = forwardRef<IRefPhaserGame, IPhaserGameProps>(function PhaserGame({ config }, ref)
+export const PhaserGame = forwardRef<IRefPhaserGame, IPhaserGameProps>(function PhaserGame({ config, width = 768, height = 432 }, ref)
 {
     /** Reference to store the Phaser game instance */
     const game = useRef<Phaser.Game | null>(null!);
@@ -24,9 +24,9 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IPhaserGameProps>(function 
         {
             // Notify that game initialization has started
             eventsCenter.emit('game-started');
-            
+
             // Create new Phaser game instance with provided configuration
-            game.current = StartGame("game-container", config);
+            game.current = StartGame("game-container", config, width, height);
 
             // Expose game instance through ref for parent component access
             if (typeof ref === 'function')
@@ -58,7 +58,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IPhaserGameProps>(function 
      * The id "game-container" matches the parent parameter passed to StartGame
      */
     return (
-        <div id="game-container"></div>
+        <div id="game-container" style={{ width, height }}></div>
     );
 
 });

@@ -17,6 +17,7 @@ export interface BooleanSwitch {
  */
 export class BooleanInteractionManager {
     private scene: Scene;
+    private uiScale: number;
     /** Map of active switches by name, storing visual components and state */
     private activeSwitches: Map<string, {
         track: Phaser.GameObjects.Rectangle,
@@ -32,8 +33,9 @@ export class BooleanInteractionManager {
      * Initialize the boolean interaction manager
      * @param scene The Phaser scene to create interactions in
      */
-    constructor(scene: Scene) {
+    constructor(scene: Scene, uiScale = 1) {
         this.scene = scene;
+        this.uiScale = uiScale;
         this.activeSwitches = new Map();
     }
 
@@ -57,9 +59,10 @@ export class BooleanInteractionManager {
         const trueText = struct.inputData.type['True']!;
         const falseText = struct.inputData.type['False']!;
         
-        // Switch visual configuration
-        const switchWidth = 90;
-        const switchHeight = 34;
+        // Switch visual configuration (scaled by uiScale)
+        const s = this.uiScale;
+        const switchWidth = Math.round(90 * s);
+        const switchHeight = Math.round(34 * s);
         let displayWidth = 0;
         let displayHeight = 0;
         
@@ -112,11 +115,11 @@ export class BooleanInteractionManager {
         switchGroup.push(handle);
     
         // Text styling for switch labels
-        const textStyle = { 
-            fontSize: '14px', 
-            fontFamily: 'Arial', 
+        const textStyle = {
+            fontSize: `${Math.round(14 * s)}px`,
+            fontFamily: 'Arial',
             fontStyle: 'bold',
-            color: '#000000' 
+            color: '#000000'
         };
         
         // Calculate text scaling for longer text labels
@@ -257,7 +260,7 @@ export class BooleanInteractionManager {
         const activeColor = 0xBBDEFF;
         const activeAlpha = 0.8;
         const inactiveAlpha = 0.6;
-        const switchWidth = 90;
+        const switchWidth = Math.round(90 * this.uiScale);
         
         // Check if visual update is needed
         const currentX = switchObj.handle.x;

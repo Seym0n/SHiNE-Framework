@@ -67,11 +67,12 @@ class Smarty extends Scene {
      */
     create(): void {
         // Initialize interaction managers for different control types
-        this.numericalManager = new NumericalInteractionManager(this);
-        this.booleanManager = new BooleanInteractionManager(this);
-        this.genericManager = new GenericInteractionManager(this);
+        const uiScale = this.game.config.uiScale ?? 1;
+        this.numericalManager = new NumericalInteractionManager(this, uiScale);
+        this.booleanManager = new BooleanInteractionManager(this, uiScale);
+        this.genericManager = new GenericInteractionManager(this, uiScale);
         this.dynamicPropertyManager = new DynamicPropertyManager(this);
-        this.statelessActionManager = new StatelessActionManager(this);
+        this.statelessActionManager = new StatelessActionManager(this, uiScale);
         
         // Listen for device closeup events to show control panel
         eventsCenter.on('enter-closeup', this.createPanel, this);
@@ -168,8 +169,9 @@ class Smarty extends Scene {
     private initializePanelLayout(): void {
         this.deletePanel();
         this.panelGroup = this.add.group();
-        this.listPositionX = 25;
-        this.listPositionY = 30;
+        const s = this.game.config.uiScale;
+        this.listPositionX = Math.round(25 * s);
+        this.listPositionY = Math.round(30 * s);
     }
 
     /**
@@ -287,13 +289,14 @@ class Smarty extends Scene {
             if (struct == null || struct.InteractionType == 'Dynamic_Property' || struct.InteractionType == 'Stateless_Action') continue;
 
             // Create action label
+            const actionFontSize = Math.round(20 * this.game.config.uiScale);
             const actionName = this.add.text(
                 this.listPositionX + 5,
                 this.listPositionY,
                 'Set ' + struct.name,
-                { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+                { fontSize: `${actionFontSize}px`, fill: '#000000', fontFamily: 'Arial' }
             ).setDepth(1);
-            
+
             this.listPositionY += actionName.displayHeight;
             this.panelGroup!.add(actionName);
 
@@ -309,7 +312,7 @@ class Smarty extends Scene {
             }
             // Dynamic_Property is read-only, so no interactive control is created
 
-            this.listPositionY += 7;
+            this.listPositionY += Math.round(7 * this.game.config.uiScale);
         }
 
         // Handle stateless actions separately (they don't have status variables)
@@ -318,11 +321,12 @@ class Smarty extends Scene {
             if (struct.InteractionType !== 'Stateless_Action') continue;
 
             // Create action label for stateless action
+            const actionFontSize = Math.round(20 * this.game.config.uiScale);
             const actionName = this.add.text(
                 this.listPositionX + 5,
                 this.listPositionY,
                 struct.name,
-                { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+                { fontSize: `${actionFontSize}px`, fill: '#000000', fontFamily: 'Arial' }
             ).setDepth(1);
             
             this.listPositionY += actionName.displayHeight;
@@ -333,7 +337,7 @@ class Smarty extends Scene {
             
             textWidth = this.createStatelessActionControl(struct, actionName, textWidth, isEnabled);
 
-            this.listPositionY += 7;
+            this.listPositionY += Math.round(7 * this.game.config.uiScale);
         }
 
         return textWidth;
@@ -587,12 +591,15 @@ class Smarty extends Scene {
      * @param panelWidth Final width of the panel content
      */
     private finalizePanelLayout(panelWidth: number): void {
+        const s = this.game.config.uiScale ?? 1;
+        const panelPadding = Math.round(20 * s);
+        const panelOrigin = Math.round(25 * s);
         // Create panel background
         this.smartHomePanel = this.add.rectangle(
-            25,
-            25,
-            panelWidth + 20,
-            this.listPositionY - 20,
+            panelOrigin,
+            panelOrigin,
+            panelWidth + panelPadding,
+            this.listPositionY - panelPadding,
             0xfeead0,
             0.8
         ).setStrokeStyle(0.25, 0x000000).setOrigin(0).setDepth(0.98);
@@ -687,12 +694,13 @@ class Smarty extends Scene {
     ): Phaser.GameObjects.Text {
         const unitOfMeasure = struct.inputData.unitOfMeasure || '';
         const statusTextContent = `${struct.name}: ${value} ${unitOfMeasure}`.trim();
-        
+        const fontSize = Math.round(20 * this.game.config.uiScale);
+
         return this.add.text(
             this.listPositionX + 5,
             this.listPositionY,
             statusTextContent,
-            { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+            { fontSize: `${fontSize}px`, fill: '#000000', fontFamily: 'Arial' }
         ).setDepth(1);
     }
 
@@ -709,12 +717,13 @@ class Smarty extends Scene {
         const transformedValue = value ? struct.inputData.type.True : struct.inputData.type.False;
         const unitOfMeasure = struct.inputData.unitOfMeasure || '';
         const statusTextContent = `${struct.name}: ${transformedValue} ${unitOfMeasure}`.trim();
-        
+        const fontSize = Math.round(20 * this.game.config.uiScale);
+
         return this.add.text(
             this.listPositionX + 5,
             this.listPositionY,
             statusTextContent,
-            { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+            { fontSize: `${fontSize}px`, fill: '#000000', fontFamily: 'Arial' }
         ).setDepth(1);
     }
 
@@ -730,12 +739,13 @@ class Smarty extends Scene {
     ): Phaser.GameObjects.Text {
         const unitOfMeasure = struct.inputData.unitOfMeasure || '';
         const statusTextContent = `${struct.name}: ${value} ${unitOfMeasure}`.trim();
-        
+        const fontSize = Math.round(20 * this.game.config.uiScale);
+
         return this.add.text(
             this.listPositionX + 5,
             this.listPositionY,
             statusTextContent,
-            { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+            { fontSize: `${fontSize}px`, fill: '#000000', fontFamily: 'Arial' }
         ).setDepth(1);
     }
 
@@ -751,12 +761,13 @@ class Smarty extends Scene {
     ): Phaser.GameObjects.Text {
         const unitOfMeasure = struct.outputData?.unitOfMeasure || '';
         const statusTextContent = `${struct.name}: ${value} ${unitOfMeasure}`.trim();
-        
+        const fontSize = Math.round(20 * this.game.config.uiScale);
+
         return this.add.text(
             this.listPositionX + 5,
             this.listPositionY,
             statusTextContent,
-            { fontSize: '20px', fill: '#000000', fontFamily: 'Arial' }
+            { fontSize: `${fontSize}px`, fill: '#000000', fontFamily: 'Arial' }
         ).setDepth(1);
     }
 

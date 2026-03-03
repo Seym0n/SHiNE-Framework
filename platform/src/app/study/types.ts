@@ -61,10 +61,16 @@ export interface GameInteractionEvent {
  * Extended Phaser game configuration with custom properties
  */
 export interface GameConfig extends Phaser.Types.Core.GameConfig {
-  /** Horizontal scaling factor for room elements */
+  /** Horizontal scaling factor for room elements (image scale, relative to 1024px) */
   scaleRoomElementsX: number;
-  /** Vertical scaling factor for room elements */
+  /** Vertical scaling factor for room elements (image scale, relative to 576px) */
   scaleRoomElementsY: number;
+  /** Horizontal position scale factor (relative to 768px authored positions) */
+  positionScaleX: number;
+  /** Vertical position scale factor (relative to 432px authored positions) */
+  positionScaleY: number;
+  /** UI scale factor for Smarty panel elements (relative to 768px base) */
+  uiScale: number;
   /** Maximum zoom level for device closeup */
   maxZoom: number;
   /** Duration for zoom/transition animations in ms */
@@ -112,6 +118,10 @@ export interface IPhaserGameProps {
   currentActiveScene?: (scene_instance: Phaser.Scene) => void;
   /** Game configuration object containing rooms, devices, and settings */
   config?: GameConfig;
+  /** Canvas width in pixels */
+  width?: number;
+  /** Canvas height in pixels */
+  height?: number;
 }
 
 // =====================

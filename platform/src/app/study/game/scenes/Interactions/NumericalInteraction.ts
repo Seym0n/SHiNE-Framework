@@ -17,6 +17,7 @@ export interface NumericalSlider {
  */
 export class NumericalInteractionManager {
     private scene: Scene;
+    private uiScale: number;
     /** Map of active sliders by name, storing visual components and configuration */
     private activeSliders: Map<string, {
         handle: Phaser.GameObjects.GameObject,
@@ -34,8 +35,9 @@ export class NumericalInteractionManager {
      * Initialize the numerical interaction manager
      * @param scene The Phaser scene to create interactions in
      */
-    constructor(scene: Scene) {
+    constructor(scene: Scene, uiScale = 1) {
         this.scene = scene;
+        this.uiScale = uiScale;
         this.activeSliders = new Map();
     }
 
@@ -55,19 +57,20 @@ export class NumericalInteractionManager {
         listPositionY: number,
         onValueChange: (name: string, value: number) => void
     ): NumericalSlider {
-        // Slider visual configuration
-        const trackWidth = 120;
-        const trackHeight = 8;
-        const handleRadius = 12;
+        // Slider visual configuration (scaled by uiScale)
+        const s = this.uiScale;
+        const trackWidth = Math.round(120 * s);
+        const trackHeight = Math.round(8 * s);
+        const handleRadius = Math.round(12 * s);
         const trackColor = 0xDDDDDD;         // Light gray for inactive track
         const activeTrackColor = 0xBBDEFF;   // Light blue for active portion
         const handleColor = 0xFFFFFF;        // White handle
         const handleBorderColor = 0xCCCCCC;  // Light gray border
         const intervalColor = 0x999999;      // Gray for interval markers
         const valueDisplayBgColor = 0xEEEEEE; // Light gray for value display
-        
-        const sliderWidth = trackWidth + 40;   // Extra space for value display
-        const sliderHeight = handleRadius * 2 + 20; // Extra padding for labels
+
+        const sliderWidth = trackWidth + Math.round(40 * s);   // Extra space for value display
+        let sliderHeight = handleRadius * 2 + Math.round(20 * s); // Extra padding for labels
 
         // Extract slider configuration from interaction structure
         const range = [
@@ -133,10 +136,10 @@ export class NumericalInteractionManager {
         
         // Create value display box
         const valueDisplay = this.scene.add.rectangle(
-            Math.floor(track.x + trackWidth / 2 + 45),
+            Math.floor(track.x + trackWidth / 2 + Math.round(45 * s)),
             Math.floor(track.y),
-            40,
-            24,
+            Math.round(40 * s),
+            Math.round(24 * s),
             valueDisplayBgColor,
             0.8
         )
@@ -149,7 +152,7 @@ export class NumericalInteractionManager {
             Math.floor(valueDisplay.x),
             Math.floor(valueDisplay.y),
             predefinedValue?.toString() || '0',
-            { fontSize: '14px', fontFamily: 'Arial', color: '#000000' }
+            { fontSize: `${Math.round(14 * s)}px`, fontFamily: 'Arial', color: '#000000' }
         )
         .setDepth(1.6)
         .setOrigin(0.5);
@@ -225,9 +228,9 @@ export class NumericalInteractionManager {
             if ((value - range[0]) % (interval * 2) === 0 || value === range[0] || value === range[1]) {
                 const intervalLabel = this.scene.add.text(
                     x,
-                    track.y + trackHeight + 6,
+                    track.y + trackHeight + Math.round(6 * s),
                     value.toString(),
-                    { fontSize: '10px', fontFamily: 'Arial', color: '#666666' }
+                    { fontSize: `${Math.round(10 * s)}px`, fontFamily: 'Arial', color: '#666666' }
                 )
                 .setDepth(1.2)
                 .setOrigin(0.5, 0);

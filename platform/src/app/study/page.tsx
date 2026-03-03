@@ -47,6 +47,19 @@ export default function Home() {
   const [isAbortModalOpen, setIsAbortModalOpen] = useState(false);
   /** Array of abort reason options for the current task */
   const [abortReasons, setAbortReasons] = useState<string[]>([]);
+  /** Viewport width tier: 'lg' ≥1024px, 'md' 768–1023px, 'sm' <768px */
+  const [tier, setTier] = useState<'lg' | 'md' | 'sm'>('lg');
+
+  /** Detect viewport width tier on mount and on resize */
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setTier(w >= 1024 ? 'lg' : w >= 768 ? 'md' : 'sm');
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   /**
    * Main effect hook that sets up the study environment:
@@ -360,12 +373,23 @@ export default function Home() {
     );
   }
 
+  // Three size tiers — canvas always 16:9, sidebar shrinks proportionally
+  const canvas  = tier === 'lg' ? { w: 768, h: 432 }
+                : tier === 'md' ? { w: 512, h: 288 }
+                :                 { w: 384, h: 216 };
+  const sidebar = tier === 'lg' ? 'w-64' : tier === 'md' ? 'w-48' : 'w-40';
+  const gap     = tier === 'lg' ? 'ml-6' : 'ml-4';
+  // env bar matches the combined width of sidebar + gap + canvas
+  const envWidth = tier === 'lg' ? 'calc(16rem + 1.5rem + 48rem)'
+                 : tier === 'md' ? 'calc(12rem + 1rem + 32rem)'
+                 :                 'calc(10rem + 1rem + 24rem)';
+
   return (
 <div className="flex flex-col items-center justify-center min-h-screen w-full bg-white dark:bg-gray-900">
   {/* Main layout: sidebar and game area arranged horizontally */}
   <div className="flex flex-row items-center justify-center">
-    {/* Left sidebar: task management, timer, and controls */}
-    <div className="h-full w-64">
+    {/* Left sidebar: same height as canvas so it matches at every tier */}
+    <div className={sidebar} style={{ height: canvas.h }}>
       <SmartHomeSidebar
         explanationTrigger={explanationTrigger}
         tasks={tasks || []}
@@ -375,25 +399,28 @@ export default function Home() {
         onOpenAbortModal={openAbortModal}
       />
     </div>
-    
+
     {/* Game area: Phaser canvas for smart home simulation */}
-    <div className="ml-6 h-full">
+    <div className={`${gap} h-full`}>
       {/* Show skeleton loader while Phaser game initializes */}
       {gameLoading && (
-        <Skeleton width={768} height={432} />
+        <Skeleton width={canvas.w} height={canvas.h} />
       )}
 
       {/* Render Phaser game once configuration is loaded */}
       {gameConfig ? (
-        <PhaserGame config={gameConfig} />
+        <PhaserGame config={gameConfig} width={canvas.w} height={canvas.h} />
       ) : (
-        <div className="bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg h-[600px] w-[768px]"></div>
+        <div
+          className="bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg"
+          style={{ width: canvas.w, height: canvas.h }}
+        ></div>
       )}
     </div>
   </div>
 
-  {/* Environment bar: displays time and environmental variables */}
-  <div className="mt-4" style={{ width: "calc(64rem + 1.5rem)" }}>
+  {/* Environment bar: matches combined width of sidebar + gap + canvas */}
+  <div className="mt-4" style={{ width: envWidth }}>
     <EnvironmentBar gameConfig={gameConfig} tasks={tasks} currentTaskId={currentTaskIndex} />
   </div>
   

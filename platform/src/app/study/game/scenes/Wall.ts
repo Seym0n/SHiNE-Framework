@@ -188,8 +188,8 @@ class Wall extends Phaser.Scene {
         // Create each door with navigation functionality
         for (let i = 0; i < doors.length; i++) {
             doorTemp = this.add.image(
-                doors[i].position.x,
-                doors[i].position.y,
+                doors[i].position.x * this.game.config.positionScaleX,
+                doors[i].position.y * this.game.config.positionScaleY,
                 this.scene.key + '_door_' + i
             )
             .setOrigin(0)

@@ -141,7 +141,11 @@ class Device extends Scene {
         const customScale = (position.scale ? position.scale : 1);
         const customOrigin = (position.origin ? position.origin : 0.5);
         
-        const device = this.add.image(position.x, position.y, 'device_' + this.scene.key + '_0')
+        const device = this.add.image(
+            position.x * (this.game.config as GameConfig).positionScaleX,
+            position.y * (this.game.config as GameConfig).positionScaleY,
+            'device_' + this.scene.key + '_0'
+        )
             .setOrigin(customOrigin)
             .setScale(
                 (this.game.config as GameConfig).scaleRoomElementsX * customScale, 
@@ -332,10 +336,10 @@ class Device extends Scene {
         // Update device texture to match current state
         this.deviceImage.setTexture('device_' + this.scene.key + '_' + stateIndex);
 
-        // Apply default positioning from device configuration
+        // Apply default positioning from device configuration (scale from authored coords)
         this.deviceImage.setPosition(
-            this.position.x,
-            this.position.y
+            this.position.x * (this.game.config as GameConfig).positionScaleX,
+            this.position.y * (this.game.config as GameConfig).positionScaleY
         );
         this.deviceImage.setScale(
             (this.game.config as GameConfig).scaleRoomElementsX * (this.position.scale || 1),
@@ -347,8 +351,8 @@ class Device extends Scene {
         if (visualState.position) {
             if(visualState.position.x && visualState.position.y){
                 this.deviceImage.setPosition(
-                    visualState.position.x,
-                    visualState.position.y
+                    visualState.position.x * (this.game.config as GameConfig).positionScaleX,
+                    visualState.position.y * (this.game.config as GameConfig).positionScaleY
                 );
             }
             if (visualState.position.scale) {

@@ -52,7 +52,7 @@ const EnvironmentBar = ({ gameConfig, tasks, currentTaskId }: EnvironmentBarProp
   
   return (
     <div className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-      <div className="flex flex-row items-center justify-start space-x-6">
+      <div className="flex flex-row flex-wrap items-center justify-start space-x-6">
         <div className="flex items-center space-x-2">
             <Clock size={20} className="text-gray-700 dark:text-gray-300" />
             <span className="font-medium text-gray-800 dark:text-gray-100">Time: {inGameTime}</span>

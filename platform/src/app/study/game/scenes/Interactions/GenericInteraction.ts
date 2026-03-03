@@ -17,6 +17,7 @@ export interface GenericDropdown {
  */
 export class GenericInteractionManager {
     private scene: Scene;
+    private uiScale: number;
     /** Map of active dropdowns by name, storing visual components and state */
     private activeDropdowns: Map<string, {
         container: Phaser.GameObjects.Rectangle,
@@ -32,8 +33,9 @@ export class GenericInteractionManager {
      * Initialize the generic interaction manager
      * @param scene The Phaser scene to create interactions in
      */
-    constructor(scene: Scene) {
+    constructor(scene: Scene, uiScale = 1) {
         this.scene = scene;
+        this.uiScale = uiScale;
         this.activeDropdowns = new Map();
     }
 
@@ -59,10 +61,11 @@ export class GenericInteractionManager {
         // Ensure predefined value is valid
         const initialValue = options.includes(predefinedValue) ? predefinedValue : options[0];
         
-        // Dropdown visual configuration
-        const containerWidth = 150;
-        const containerHeight = 34;
-        const dropdownMaxHeight = Math.min(options.length * 30, 120);
+        // Dropdown visual configuration (scaled by uiScale)
+        const s = this.uiScale;
+        const containerWidth = Math.round(150 * s);
+        const containerHeight = Math.round(34 * s);
+        const dropdownMaxHeight = Math.min(options.length * Math.round(30 * s), Math.round(120 * s));
         let displayWidth = 0;
         let displayHeight = 0;
         
@@ -94,12 +97,12 @@ export class GenericInteractionManager {
         
         // Create text to display selected value
         const selectedText = this.scene.add.text(
-            container.x - 60,
+            container.x - Math.round(60 * s),
             container.y,
             initialValue,
-            { 
-                fontSize: '14px', 
-                fontFamily: 'Arial', 
+            {
+                fontSize: `${Math.round(14 * s)}px`,
+                fontFamily: 'Arial',
                 color: '#000000'
             }
         )
@@ -110,12 +113,12 @@ export class GenericInteractionManager {
         
         // Create dropdown arrow
         const arrow = this.scene.add.text(
-            container.x + 60,
+            container.x + Math.round(60 * s),
             container.y,
             '▼',
-            { 
-                fontSize: '12px', 
-                fontFamily: 'Arial', 
+            {
+                fontSize: `${Math.round(12 * s)}px`,
+                fontFamily: 'Arial',
                 color: '#666666'
             }
         )
@@ -139,14 +142,15 @@ export class GenericInteractionManager {
         
         // Create option text elements
         const optionTexts: Phaser.GameObjects.Text[] = [];
+        const optionRowHeight = Math.round(30 * s);
         for (let i = 0; i < options.length; i++) {
             const optionText = this.scene.add.text(
-                dropdown.x - containerWidth / 2 + 10,
-                dropdown.y - dropdownMaxHeight / 2 + (i * 30) + 15,
+                dropdown.x - containerWidth / 2 + Math.round(10 * s),
+                dropdown.y - dropdownMaxHeight / 2 + (i * optionRowHeight) + Math.round(15 * s),
                 options[i],
-                { 
-                    fontSize: '14px', 
-                    fontFamily: 'Arial', 
+                {
+                    fontSize: `${Math.round(14 * s)}px`,
+                    fontFamily: 'Arial',
                     color: '#000000'
                 }
             )
