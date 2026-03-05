@@ -1,6 +1,6 @@
 import { eventsCenter } from "../EventsCenter";
 import { Scene } from 'phaser';
-import { InteractionStructure, StatusVariable, InteractionGroup, PanelData } from './Interactions/InteractionTypes';
+import { InteractionStructure, StatusVariable, PanelData } from './Interactions/InteractionTypes';
 import { NumericalInteractionManager } from './Interactions/NumericalInteraction';
 import { BooleanInteractionManager } from './Interactions/BooleanInteraction';
 import { GenericInteractionManager } from './Interactions/GenericInteraction';
@@ -30,8 +30,6 @@ class Smarty extends Scene {
     /** Wall scene containing the current device */
     private deviceWall: string;
 
-    /** Groups of interaction elements with visibility rules */
-    private interactionGroups: InteractionGroup[] = [];
     /** Map of interaction controls for dynamic enable/disable updates */
     private interactionControls: Map<string, {
         actionName: Phaser.GameObjects.Text,
@@ -120,7 +118,7 @@ class Smarty extends Scene {
                     }
                     
                     // Update conditional visibility
-                    this.updateInteractionVisibility(data.interaction, data.value);
+                    this.updateInteractionVisibility(data.interaction);
                     return;
                 }
             }
@@ -193,9 +191,6 @@ class Smarty extends Scene {
             const struct = this.findInteractionStructureByName(interactionVariableNames[i], interactionStructure);
             if (struct == null) continue;
 
-            // For Dynamic_Property: only show if visible is true, otherwise hide completely
-            if (struct.InteractionType === 'Dynamic_Property' && struct.currentState?.visible === false) continue;
-
             let statusText: Phaser.GameObjects.Text | null = null;
 
             if (struct.InteractionType === 'Numerical_Action') {
@@ -224,13 +219,18 @@ class Smarty extends Scene {
                 });
             } else if (struct.InteractionType === 'Dynamic_Property') {
                 const currentValue = struct.currentState?.value || interactionValues[interactionVariableNames[i]];
-                statusText = this.handleStatusDynamicProperty(struct, currentValue);
+                // Always track in statusVariables for visibility condition evaluation
                 this.statusVariables.push({
                     name: struct.name,
                     value: String(currentValue),
                     struct: struct,
-                    text: statusText
+                    text: null
                 });
+                // Only render display text if visible
+                if (struct.currentState?.visible !== false) {
+                    statusText = this.handleStatusDynamicProperty(struct, currentValue);
+                    this.statusVariables[this.statusVariables.length - 1].text = statusText;
+                }
             }
 
             if (statusText != null) {
@@ -367,7 +367,7 @@ class Smarty extends Scene {
             (name, newValue) => {
                 if (isEnabled) {
                     this.updateNumericalStatusVariable(name, newValue);
-                    this.updateInteractionVisibility(name, newValue);
+                    this.updateInteractionVisibility(name);
                 }
             }
         );
@@ -426,7 +426,7 @@ class Smarty extends Scene {
             (name, newValue) => {
                 if (isEnabled) {
                     this.updateBooleanStatusVariable(name, newValue);
-                    this.updateInteractionVisibility(name, newValue);
+                    this.updateInteractionVisibility(name);
                 }
             }
         );
@@ -485,7 +485,7 @@ class Smarty extends Scene {
             (name, newValue) => {
                 if (isEnabled) {
                     this.updateGenericStatusVariable(name, newValue);
-                    this.updateInteractionVisibility(name, newValue);
+                    this.updateInteractionVisibility(name);
                 }
             }
         );
@@ -582,7 +582,7 @@ class Smarty extends Scene {
      */
     private applyVisibilityRules(interactionValues: { [key: string]: unknown }): void {
         Object.keys(interactionValues).forEach(interactionName => {
-            this.updateInteractionVisibility(interactionName, interactionValues[interactionName]);
+            this.updateInteractionVisibility(interactionName);
         });
     }
 
@@ -659,7 +659,6 @@ class Smarty extends Scene {
         
         // Reset panel state
         this.statusVariables = [];
-        this.interactionGroups = [];
         this.interactionControls.clear();
         this.panelAvailable = false;
     }
@@ -884,26 +883,13 @@ class Smarty extends Scene {
             if (this.statusVariables[i].name === name) {
                 const statusVar = this.statusVariables[i];
                 statusVar.value = value;
-                
-                // Update status display text
-                const unitOfMeasure = statusVar.struct.outputData?.unitOfMeasure || '';
-                statusVar.text.setText(`${name}: ${value} ${unitOfMeasure}`.trim());
 
-                const updateData = {
-                    device: this.currentDevice,
-                    interaction: statusVar.struct.name,
-                    value: value
-                };
-
-                // Always emit for internal device synchronization
-                eventsCenter.emit('update-interaction', updateData);
-                
-                // Dynamic properties don't typically need backend updates since they're read-only
-                // But emit if not processing external changes for consistency
-                if (!this.processingExternalUpdate) {
-                    eventsCenter.emit('update-interaction-backend', updateData);
+                // Update status display text if visible
+                if (statusVar.text !== null) {
+                    const unitOfMeasure = statusVar.struct.outputData?.unitOfMeasure || '';
+                    statusVar.text.setText(`${name}: ${value} ${unitOfMeasure}`.trim());
                 }
-                
+
                 return;
             }
         }
@@ -1003,7 +989,7 @@ class Smarty extends Scene {
 
         // Emit for internal device synchronization
         eventsCenter.emit('update-interaction', updateData);
-        
+
         // Only emit backend update if not processing external changes
         if (!this.processingExternalUpdate) {
             eventsCenter.emit('update-interaction-backend', updateData);

@@ -8,7 +8,8 @@
     "integrated_explanation_engine": {
         "mixer_01": "The mixer cannot be turned on after 22:00",
         "deep_fryer_01": "As long as the cooker hood is off, the deep fryer remains off.",
-        "lamp_01": "The lamp is turned on because the room is dark."
+        "lamp_01": "The lamp is turned on because the room is dark.",
+        "dispenser_01": "The dispenser is empty. Refill it before dispensing."
     },
     "explanation_rating": "like"
 }

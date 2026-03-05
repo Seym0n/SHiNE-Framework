@@ -146,12 +146,21 @@ export default function Home() {
       <header className="w-full p-4 sm:p-6 bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image 
-              src="/smart_home.png" 
-              alt="Smart Home Icon" 
-              width={40} 
+            <Image
+              src="/smart_home.png"
+              alt="Smart Home Icon"
+              width={40}
               height={40}
               priority
+              className="dark:hidden"
+            />
+            <Image
+              src="/smart_home_dm.png"
+              alt="Smart Home Icon"
+              width={40}
+              height={40}
+              priority
+              className="hidden dark:block"
             />
             <h1 className="text-xl sm:text-2xl font-bold">Virtual Smart Home Platform</h1>
           </div>

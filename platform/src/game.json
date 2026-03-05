@@ -2,7 +2,7 @@
     "environment": {
         "time": {
             "startTime": {
-                "hour": 18,
+                "hour": 22,
                 "minute": 0
             },
             "speed": 10
@@ -100,6 +100,137 @@
             ]
         },
         {
+            "id": "pet_food_collect_rule",
+            "name": "Collect Pet Food",
+            "precondition": [
+                {
+                    "type": "Device",
+                    "device": "pet_food",
+                    "condition": {
+                        "name": "Collect",
+                        "operator": "==",
+                        "value": true
+                    }
+                }
+            ],
+            "action": [
+                {
+                    "type": "Device_Interaction",
+                    "device": "pet_food",
+                    "interaction": {
+                        "name": "Collected",
+                        "value": "true"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "dispenser_dispense_rule",
+            "name": "Dispense Removes Food",
+            "precondition": [
+                {
+                    "type": "Device",
+                    "device": "pet_food_dispenser",
+                    "condition": {
+                        "name": "Dispense",
+                        "operator": "==",
+                        "value": true
+                    }
+                },
+                {
+                    "type": "Device",
+                    "device": "pet_food_dispenser",
+                    "condition": {
+                        "name": "Has Food",
+                        "operator": "==",
+                        "value": "true"
+                    }
+                }
+            ],
+            "action": [
+                {
+                    "type": "Device_Interaction",
+                    "device": "pet_food_dispenser",
+                    "interaction": {
+                        "name": "Has Food",
+                        "value": "false"
+                    }
+                },
+                {
+                    "type": "Device_Interaction",
+                    "device": "pet_food_dispenser",
+                    "interaction": {
+                        "name": "Dispensed",
+                        "value": "true"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "dispenser_empty_rule",
+            "name": "Dispense With No Food",
+            "precondition": [
+                {
+                    "type": "Device",
+                    "device": "pet_food_dispenser",
+                    "condition": {
+                        "name": "Dispense",
+                        "operator": "==",
+                        "value": true
+                    }
+                },
+                {
+                    "type": "Device",
+                    "device": "pet_food_dispenser",
+                    "condition": {
+                        "name": "Has Food",
+                        "operator": "==",
+                        "value": "false"
+                    }
+                }
+            ],
+            "action": [
+                {
+                    "type": "Explanation",
+                    "explanation": "dispenser_01"
+                }
+            ]
+        },
+        {
+            "id": "dispenser_refill_rule",
+            "name": "Refill Adds Food",
+            "precondition": [
+                {
+                    "type": "Device",
+                    "device": "pet_food_dispenser",
+                    "condition": {
+                        "name": "Refill",
+                        "operator": "==",
+                        "value": true
+                    }
+                },
+                {
+                    "type": "Device",
+                    "device": "pet_food",
+                    "condition": {
+                        "name": "Collected",
+                        "operator": "==",
+                        "value": "true"
+                    }
+                }
+            ],
+            "action": [
+                {
+                    "type": "Device_Interaction",
+                    "device": "pet_food_dispenser",
+                    "interaction": {
+                        "name": "Has Food",
+                        "value": "true"
+                    }
+                }
+            ]
+        },
+        {
             "id": "book_rule",
             "name": "Turn On Lamp When Book Is Open",
             "precondition": [
@@ -110,6 +241,15 @@
                         "name": "Open",
                         "operator": "==",
                         "value": true
+                    }
+                },
+                {
+                    "type": "Device",
+                    "device": "lamp",
+                    "condition": {
+                        "name": "Power",
+                        "operator": "==",
+                        "value": false
                     }
                 }
             ],
@@ -240,6 +380,45 @@
                             "name": "Open",
                             "operator": "==",
                             "value": true
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "dispense_pet_food",
+                "description": "Dispense pet food using the dispenser",
+                "timer": 120,
+                "abortable": true,
+                "abortionOptions": [
+                    "I believe this task is impossible.",
+                    "I want to skip this task."
+                ],
+                "environment": [
+                    { "name": "Weather", "value": "Sunny" },
+                    { "name": "Temperature", "value": "20 °C" }
+                ],
+                "defaultDeviceProperties": [
+                    {
+                        "device": "pet_food_dispenser",
+                        "properties": [
+                            { "name": "Has Food", "value": "false" },
+                            { "name": "Dispensed", "value": "false" }
+                        ]
+                    },
+                    {
+                        "device": "pet_food",
+                        "properties": [
+                            { "name": "Collected", "value": "false" }
+                        ]
+                    }
+                ],
+                "goals": [
+                    {
+                        "device": "pet_food_dispenser",
+                        "condition": {
+                            "name": "Dispensed",
+                            "operator": "==",
+                            "value": "true"
                         }
                     }
                 ]
@@ -464,6 +643,22 @@
                             "visualState": [
                                 { "default": true, "image": "assets/images/shared_room/devices/wall1_cookerhood.webp" }
                             ]
+                        },
+                        {
+                            "name": "Dishwasher",
+                            "id": "dishwasher",
+                            "position": {
+                                "x": 395,
+                                "y": 398,
+                                "scale": 1,
+                                "origin": 1
+                            },
+                            "interactions": [
+
+                            ],
+                            "visualState": [
+                                { "default": true, "image": "assets/images/shared_room/devices/wall1_dishwasher.png" }
+                            ]
                         }
                     ]
                 },
@@ -641,6 +836,111 @@
                                     }
                                 }
 
+                            ]
+                        },
+                        {
+                            "name": "Pet Food",
+                            "id": "pet_food",
+                            "position": {
+                                "x": 590,
+                                "y": 400,
+                                "scale": 1,
+                                "origin": 1
+                            },
+                            "interactions": [
+                                {
+                                    "InteractionType": "Stateless_Action",
+                                    "name": "Collect",
+                                    "inputData": {
+                                        "valueType": [
+                                            "null",
+                                            "null"
+                                        ],
+                                        "unitOfMeasure": "null"
+                                    },
+                                    "currentState": {
+                                        "visible": [
+                                            { "name": "Collected", "value": "false" }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "InteractionType": "Dynamic_Property",
+                                    "name": "Collected",
+                                    "outputData": {
+                                        "valueType": ["PrimitiveType", "String"],
+                                        "unitOfMeasure": null
+                                    },
+                                    "currentState": {
+                                        "visible": false,
+                                        "value": "false"
+                                    }
+                                }
+                            ],
+                            "visualState": [
+                                { "default": true, "image": "assets/images/alice_room/devices/petfood.webp" },
+                                { "default": false, "conditions": [ { "name": "Collected", "value": "true" } ], "image": "assets/images/alice_room/devices/petfood_empty.webp" }
+                            ]
+                        },
+                        {
+                            "id": "pet_food_dispenser",
+                            "name": "Pet Food Dispenser",
+                            "position": {
+                                "x": 380,
+                                "y": 400,
+                                "scale": 1,
+                                "origin": 1
+                            },
+                            "interactions": [
+                                {
+                                    "InteractionType": "Stateless_Action",
+                                    "name": "Dispense",
+                                    "inputData": {
+                                        "valueType": [ "null", "null" ],
+                                        "unitOfMeasure": "null"
+                                    },
+                                    "currentState": {
+                                        "visible": true
+                                    }
+                                },
+                                {
+                                    "InteractionType": "Stateless_Action",
+                                    "name": "Refill",
+                                    "inputData": {
+                                        "valueType": [ "null", "null" ],
+                                        "unitOfMeasure": "null"
+                                    },
+                                    "currentState": {
+                                        "visible": true
+                                    }
+                                },
+                                {
+                                    "InteractionType": "Dynamic_Property",
+                                    "name": "Has Food",
+                                    "outputData": {
+                                        "valueType": ["PrimitiveType", "String"],
+                                        "unitOfMeasure": null
+                                    },
+                                    "currentState": {
+                                        "visible": true,
+                                        "value": "true"
+                                    }
+                                },
+                                {
+                                    "InteractionType": "Dynamic_Property",
+                                    "name": "Dispensed",
+                                    "outputData": {
+                                        "valueType": ["PrimitiveType", "String"],
+                                        "unitOfMeasure": null
+                                    },
+                                    "currentState": {
+                                        "visible": false,
+                                        "value": "false"
+                                    }
+                                }
+                            ],
+                            "visualState": [
+                                { "default": true, "image": "assets/images/alice_room/devices/wall1_petfooddispenser.webp" }
                             ]
                         }
                     ],
