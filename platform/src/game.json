@@ -2,7 +2,7 @@
     "environment": {
         "time": {
             "startTime": {
-                "hour": 22,
+                "hour": 18,
                 "minute": 0
             },
             "speed": 10
@@ -247,6 +247,27 @@
         ]
     },
     "rooms": [
+        {
+            "name": "Demo Room",
+            "walls": [
+                {
+                    "image": "assets/images/demo_room/room1.jpeg",
+                    "default": false
+                },
+                {
+                    "image": "assets/images/demo_room/room2.jpeg",
+                    "default": false
+                },
+                {
+                    "image": "assets/images/demo_room/room3.jpeg",
+                    "default": false
+                },
+                {
+                    "image": "assets/images/demo_room/room4.jpeg",
+                    "default": false
+                }
+            ]
+        },
         {
             "name": "Shared Room",
             "walls": [
