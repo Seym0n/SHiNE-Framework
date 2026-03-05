@@ -136,6 +136,39 @@
         "abortable": true,
         "tasks": [
             {
+                "id": "turn_on_mixer",
+                "description": "Turn on the mixer",
+                "timer": 120,
+                "abortable": true,
+                "abortionOptions": [
+                    "I believe this task is impossible.",
+                    "I want to skip this task.",
+                    "I believe the mixer is broken"
+                ],
+                "environment": [
+                    { "name": "Weather", "value": "Cloudy" },
+                    { "name": "Temperature", "value": "8 °C" }
+                ],
+                "defaultDeviceProperties": [
+                    {
+                        "device": "mixer",
+                        "properties": [
+                            { "name": "Power", "value": false }
+                        ]
+                    }
+                ],
+                "goals": [
+                    {
+                        "device": "mixer",
+                        "condition": {
+                            "name": "Power",
+                            "operator": "==",
+                            "value": true
+                        }
+                    }
+                ]
+            },
+            {
                 "id": "deep_fryer",
                 "description": "Turn on the deep fryer",
                 "timer": 120,
@@ -165,39 +198,6 @@
                 "goals": [
                     {
                         "device": "deep_fryer",
-                        "condition": {
-                            "name": "Power",
-                            "operator": "==",
-                            "value": true
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "turn_on_mixer",
-                "description": "Turn on the mixer",
-                "timer": 120,
-                "abortable": true,
-                "abortionOptions": [
-                    "I believe this task is impossible.",
-                    "I want to skip this task.",
-                    "I believe the mixer is broken"
-                ],
-                "environment": [
-                    { "name": "Weather", "value": "Cloudy" },
-                    { "name": "Temperature", "value": "8 °C" }
-                ],
-                "defaultDeviceProperties": [
-                    {
-                        "device": "mixer",
-                        "properties": [
-                            { "name": "Power", "value": false }
-                        ]
-                    }
-                ],
-                "goals": [
-                    {
-                        "device": "mixer",
                         "condition": {
                             "name": "Power",
                             "operator": "==",
