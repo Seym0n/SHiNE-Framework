@@ -58,22 +58,10 @@ export default function Home() {
    * 3. Enable/disable study access based on data availability
    */
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const encodedData = queryParams.get('data');
-    let customData = null;
-    
-    if (encodedData) {
-      try {
-        const decodedString = atob(encodedData);
-        customData = JSON.parse(decodedString);
-        if (customData) {
-          setIsValid(true);
-        }
-      } catch (error) {
-        console.error('Error parsing URL data parameter:', error);
-      }
-    }
-    
+    const customData = {};
+
+    setIsValid(true);
+
     setCustomData(customData);
     
     const existingSessionId = localStorage.getItem("smartHomeSessionId");

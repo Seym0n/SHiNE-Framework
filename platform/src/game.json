@@ -139,9 +139,9 @@
                 },
                 {
                     "type": "Device",
-                    "device": "pet_food_dispenser",
+                    "device": "pet_food",
                     "condition": {
-                        "name": "Contains Food",
+                        "name": "Collected",
                         "operator": "==",
                         "value": "false"
                     }
