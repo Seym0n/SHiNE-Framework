@@ -162,7 +162,7 @@ export default function Home() {
               priority
               className="hidden dark:block"
             />
-            <h1 className="text-xl sm:text-2xl font-bold">Virtual Smart Home Platform</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">V-SHiNE Platform</h1>
           </div>
         </div>
       </header>
@@ -170,26 +170,17 @@ export default function Home() {
       {/* Main content area with study onboarding */}
       <main className="flex flex-col items-center justify-center p-6 sm:p-10">
         <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sm:p-8">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Virtual Smart Home Study</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center">V-SHiNE Demo</h2>
           
           <p className="mb-6 text-gray-600 dark:text-gray-300">
             Welcome to our research study on smart home interactions. You&apos;ll explore various scenarios and provide feedback on your experience.
           </p>
           
-          {/* Conditional status message based on survey data availability */}
-          {customData ? (
-            <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-              <p className="text-blue-800 dark:text-blue-300 text-sm">
-                Your survey data has been received. Click Continue to begin the experiment.
-              </p>
-            </div>
-          ) : (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg">
-              <p className="text-red-800 dark:text-red-300 text-sm">
-                No survey data found. Please return to the survey and click the link provided there.
-              </p>
-            </div>
-          )}
+          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+            <p className="text-blue-800 dark:text-blue-300 text-sm">
+              Please note that, in a real study, this part can host any questionnaire. The collected responses can then be passed to the game as personalized user context, allowing different game settings and behaviors to be adapted to each participant.
+            </p>
+          </div>
           
           {/* Study start button with loading state */}
           <button
@@ -210,21 +201,17 @@ export default function Home() {
                 Processing...
               </span>
             ) : (
-              "Proceed to Experiment"
+              "Proceed to Demo"
             )}
           </button>
           
-          {/* Research consent disclaimer */}
-          <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">
-            By proceeding, you agree to participate in this research study. Your interactions will be recorded anonymously for research purposes.
-          </p>
         </div>
       </main>
 
       {/* Footer with copyright information */}
       <footer className="w-full p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="max-w-5xl mx-auto text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>© 2025 Virtual Smart Home Platform</p>
+          <p>© 2026 V-SHiNE Platform</p>
         </div>
       </footer>
     </div>

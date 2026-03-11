@@ -24,14 +24,14 @@ export default function CompletionPage() {
               priority
               className="hidden dark:block"
             />
-            <h1 className="text-xl sm:text-2xl font-bold">Virtual Smart Home Platform</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">V-SHiNE Platform</h1>
           </div>
         </div>
       </header>
 
       <main className="flex flex-col items-center justify-center p-6 sm:p-10">
         <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sm:p-8">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Study Completed</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center">Demo Completed</h2>
           
           <div className="mb-6 flex flex-col items-center">
             <div className="bg-green-100 dark:bg-green-900/30 rounded-full p-3 mb-4">
@@ -39,21 +39,18 @@ export default function CompletionPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
-              Thank you for participating in our virtual smart home study! Your contributions will help improve future smart home interfaces.
+            <p className="text-center text-gray-600 dark:text-gray-300 mb-3">
+              Thank you for participating in the demo game. We hope you enjoyed it. We would be delighted to hear your feedback. 
+Please note that, in a real study, this final step could also include any post-questionnaire.
             </p>
           </div>
           
-          
-          <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">
-            Your data has been recorded anonymously and will be used for research purposes only. Thank you for your participation.
-          </p>
         </div>
       </main>
 
       <footer className="w-full p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="max-w-5xl mx-auto text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>© 2025 Virtual Smart Home Platform</p>
+          <p>© 2026 V-SHiNE Platform</p>
         </div>
       </footer>
     </div>

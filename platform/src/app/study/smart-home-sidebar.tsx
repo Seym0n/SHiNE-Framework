@@ -291,7 +291,7 @@ const SmartHomeSidebar = ({
       {/* Sidebar header with platform branding — visible only on desktop (≥1024px) */}
       <div className="hidden lg:flex items-center justify-center pb-4 border-b border-gray-200 dark:border-gray-600 mb-7">
         <Home className="mr-2 text-blue-600 dark:text-blue-400" />
-        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Smart Home<br />Simulation</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">V-SHiNE</h1>
       </div>
 
       {/* Current task display with optional abort button */}

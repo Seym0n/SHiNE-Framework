@@ -125,56 +125,14 @@
             ]
         },
         {
-            "id": "dispenser_dispense_rule",
-            "name": "Dispense Removes Food",
-            "precondition": [
-                {
-                    "type": "Device",
-                    "device": "pet_food_dispenser",
-                    "condition": {
-                        "name": "Dispense",
-                        "operator": "==",
-                        "value": true
-                    }
-                },
-                {
-                    "type": "Device",
-                    "device": "pet_food_dispenser",
-                    "condition": {
-                        "name": "Has Food",
-                        "operator": "==",
-                        "value": "true"
-                    }
-                }
-            ],
-            "action": [
-                {
-                    "type": "Device_Interaction",
-                    "device": "pet_food_dispenser",
-                    "interaction": {
-                        "name": "Has Food",
-                        "value": "false"
-                    }
-                },
-                {
-                    "type": "Device_Interaction",
-                    "device": "pet_food_dispenser",
-                    "interaction": {
-                        "name": "Dispensed",
-                        "value": "true"
-                    }
-                }
-            ]
-        },
-        {
             "id": "dispenser_empty_rule",
-            "name": "Dispense With No Food",
+            "name": "Refill With No Food",
             "precondition": [
                 {
                     "type": "Device",
                     "device": "pet_food_dispenser",
                     "condition": {
-                        "name": "Dispense",
+                        "name": "Refill",
                         "operator": "==",
                         "value": true
                     }
@@ -183,7 +141,7 @@
                     "type": "Device",
                     "device": "pet_food_dispenser",
                     "condition": {
-                        "name": "Has Food",
+                        "name": "Contains Food",
                         "operator": "==",
                         "value": "false"
                     }
@@ -224,7 +182,7 @@
                     "type": "Device_Interaction",
                     "device": "pet_food_dispenser",
                     "interaction": {
-                        "name": "Has Food",
+                        "name": "Contains Food",
                         "value": "true"
                     }
                 }
@@ -348,7 +306,7 @@
             },
             {
                 "id": "book",
-                "description": "Open the book",
+                "description": "Go to your room and turn on the light",
                 "abortable": true,
                 "timer": 120,
                 "abortionOptions": [
@@ -375,9 +333,9 @@
                 ],
                 "goals": [
                     {
-                        "device": "book",
+                        "device": "lamp",
                         "condition": {
-                            "name": "Open",
+                            "name": "Power",
                             "operator": "==",
                             "value": true
                         }
@@ -385,8 +343,8 @@
                 ]
             },
             {
-                "id": "dispense_pet_food",
-                "description": "Dispense pet food using the dispenser",
+                "id": "refill_food_dispenser",
+                "description": "Refill the food dispenser",
                 "timer": 120,
                 "abortable": true,
                 "abortionOptions": [
@@ -401,8 +359,7 @@
                     {
                         "device": "pet_food_dispenser",
                         "properties": [
-                            { "name": "Has Food", "value": "false" },
-                            { "name": "Dispensed", "value": "false" }
+                            { "name": "Contains Food", "value": "false" }
                         ]
                     },
                     {
@@ -416,7 +373,7 @@
                     {
                         "device": "pet_food_dispenser",
                         "condition": {
-                            "name": "Dispensed",
+                            "name": "Contains Food",
                             "operator": "==",
                             "value": "true"
                         }
@@ -426,27 +383,6 @@
         ]
     },
     "rooms": [
-        {
-            "name": "Demo Room",
-            "walls": [
-                {
-                    "image": "assets/images/demo_room/room1.jpeg",
-                    "default": false
-                },
-                {
-                    "image": "assets/images/demo_room/room2.jpeg",
-                    "default": false
-                },
-                {
-                    "image": "assets/images/demo_room/room3.jpeg",
-                    "default": false
-                },
-                {
-                    "image": "assets/images/demo_room/room4.jpeg",
-                    "default": false
-                }
-            ]
-        },
         {
             "name": "Shared Room",
             "walls": [
@@ -694,7 +630,7 @@
                                 "scale": 0.5
                             },
                             "destination": {
-                                "room": "alice_room",
+                                "room": "your_room",
                                 "wall": "wall1"
                             }
                         }
@@ -752,7 +688,7 @@
             ]
         },
         {
-            "name": "Alice Room",
+            "name": "Your Room",
             "walls": [
                 {
                     "image": "assets/images/alice_room/wall1.webp",
@@ -894,17 +830,6 @@
                             "interactions": [
                                 {
                                     "InteractionType": "Stateless_Action",
-                                    "name": "Dispense",
-                                    "inputData": {
-                                        "valueType": [ "null", "null" ],
-                                        "unitOfMeasure": "null"
-                                    },
-                                    "currentState": {
-                                        "visible": true
-                                    }
-                                },
-                                {
-                                    "InteractionType": "Stateless_Action",
                                     "name": "Refill",
                                     "inputData": {
                                         "valueType": [ "null", "null" ],
@@ -916,7 +841,7 @@
                                 },
                                 {
                                     "InteractionType": "Dynamic_Property",
-                                    "name": "Has Food",
+                                    "name": "Contains Food",
                                     "outputData": {
                                         "valueType": ["PrimitiveType", "String"],
                                         "unitOfMeasure": null
@@ -924,18 +849,6 @@
                                     "currentState": {
                                         "visible": true,
                                         "value": "true"
-                                    }
-                                },
-                                {
-                                    "InteractionType": "Dynamic_Property",
-                                    "name": "Dispensed",
-                                    "outputData": {
-                                        "valueType": ["PrimitiveType", "String"],
-                                        "unitOfMeasure": null
-                                    },
-                                    "currentState": {
-                                        "visible": false,
-                                        "value": "false"
                                     }
                                 }
                             ],
