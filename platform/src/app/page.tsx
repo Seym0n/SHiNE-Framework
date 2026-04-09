@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from 'uuid';
+import CaptchaModal from "./captcha-modal";
 
 /**
  * Home page component for the Virtual Smart Home Platform
@@ -17,6 +18,10 @@ export default function Home() {
   const [customData, setCustomData] = useState<Record<string, unknown> | null>(null);
   /** Loading state for async operations */
   const [isLoading, setIsLoading] = useState(false);
+  /** Whether the captcha modal is open */
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
+  /** Captcha error message to display in the modal */
+  const [captchaError, setCaptchaError] = useState('');
 
   /**
    * Verifies if an existing session ID is still valid and active
@@ -72,13 +77,23 @@ export default function Home() {
   }, [verifyExistingSession]);
 
   /**
-   * Initiates a new study session by:
+   * Opens the captcha modal before starting the study.
+   * Session creation only happens after successful captcha verification.
+   */
+  const handleProceedClick = () => {
+    if (!isValid) return;
+    setCaptchaError('');
+    setIsCaptchaOpen(true);
+  };
+
+  /**
+   * Initiates a new study session after captcha verification:
    * 1. Generating a unique session ID
    * 2. Creating session data with user metadata
    * 3. Sending session to backend for storage
    * 4. Redirecting to the study interface
    */
-  const startStudy = async () => {
+  const startStudy = async (captchaText: string, captchaHash: string) => {
     if (!isValid) return;
     
     setIsLoading(true);
@@ -88,6 +103,8 @@ export default function Home() {
       
       const sessionData = {
         sessionId: sessionId,
+        captchaText,
+        captchaHash,
         startTime: new Date().toISOString(),
         lastActivity: new Date().toISOString(),
         userAgent: navigator.userAgent,
@@ -109,13 +126,19 @@ export default function Home() {
       
       if (!response.ok) {
         const errorData = await response.json();
-        
+
         if (response.status === 409 && errorData.existingSessionId) {
           localStorage.setItem("smartHomeSessionId", errorData.existingSessionId);
           router.push(`/study`);
           return;
         }
-        
+
+        if (response.status === 403) {
+          setCaptchaError('Incorrect captcha. Please try again.');
+          setIsCaptchaOpen(true);
+          return;
+        }
+
         throw new Error(errorData.error || 'Failed to create session');
       }
       
@@ -172,7 +195,7 @@ export default function Home() {
           
           {/* Study start button with loading state */}
           <button
-            onClick={startStudy}
+            onClick={handleProceedClick}
             disabled={!isValid || isLoading}
             className={`w-full py-3 px-4 rounded-md text-white text-center font-medium transition ${
               isValid && !isLoading
@@ -195,6 +218,17 @@ export default function Home() {
           
         </div>
       </main>
+
+      <CaptchaModal
+        isOpen={isCaptchaOpen}
+        onClose={() => { setIsCaptchaOpen(false); setCaptchaError(''); }}
+        onVerified={(text, hash) => {
+          setIsCaptchaOpen(false);
+          setCaptchaError('');
+          startStudy(text, hash);
+        }}
+        error={captchaError}
+      />
 
       {/* Footer with copyright information */}
       <footer className="w-full p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">

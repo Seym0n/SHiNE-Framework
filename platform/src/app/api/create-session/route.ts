@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import gameConfig from '@/game.json';
+import { verifyCaptcha } from '@/lib/captcha';
 
 /**
  * POST /api/create-session
@@ -25,13 +26,21 @@ import gameConfig from '@/game.json';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { sessionId, custom_data } = body;
+    const { sessionId, custom_data, captchaText, captchaHash } = body;
 
     // Validate required fields from the request
     if (!sessionId || !custom_data) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
+      );
+    }
+
+    // Verify captcha server-side before proceeding
+    if (!captchaText || !captchaHash || !verifyCaptcha(captchaText, captchaHash)) {
+      return NextResponse.json(
+        { error: 'Captcha verification failed' },
+        { status: 403 }
       );
     }
 
