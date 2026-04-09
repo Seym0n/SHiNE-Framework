@@ -3,10 +3,12 @@ version: '3.8'
 services:
   # MongoDB service
   mongodb:
-    image: mongo:6.0
+    image: mongodb/mongodb-community-server:7.0-ubi8
     container_name: mongodb
     restart: always
     environment:
+      - MONGO_INITDB_ROOT_USERNAME=vadmin
+      - MONGO_INITDB_ROOT_PASSWORD=rZCvD39yDhkqycNm
       - MONGO_INITDB_DATABASE=smart-home-study
     volumes:
       - mongodb_data:/data/db
@@ -15,7 +17,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/smart-home-study --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/smart-home                                                                                                                                                             -study --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,7 +33,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - MONGODB_URI=mongodb://mongodb:27017/smart-home-study
+      - MONGODB_URI=mongodb://vadmin:rZCvD39yDhkqycNm@mongodb:27017/smart-home-s                                                                                                                                                             tudy?authSource=admin
       - MONGODB_DB=smart-home-study
     ports:
       - "3000:3000"
